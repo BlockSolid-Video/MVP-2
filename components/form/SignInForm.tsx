@@ -8,6 +8,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import GoogleSignInButton from "../GoogleSignInButton";
+import { signIn} from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 
 const FormSchema = z.object({
@@ -19,13 +21,28 @@ const FormSchema = z.object({
 });
 
 export default function SignInForm() {
+    
+    const router = useRouter();
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         
     })
     
-    const onSubmit = (values: z.infer<typeof FormSchema>) => {
+    const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+        console.log('clicked')
         console.log(values)
+        const signInData = await signIn('credentials',{
+            email: values.email,
+            password: values.password,
+        });
+        console.log(signInData)
+        // if (signInData?.error) {
+        //     console.log(signInData.error)
+        // }else{
+        //     router.push('/user')
+        // }
+
+
     }
     return (
         
