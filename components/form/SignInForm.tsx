@@ -8,7 +8,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import GoogleSignInButton from "../GoogleSignInButton";
-import { signIn} from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 
@@ -30,20 +30,19 @@ export default function SignInForm() {
     
     const onSubmit = async (values: z.infer<typeof FormSchema>) => {
         console.log('clicked')
-        console.log(values)
-        const signInData = await signIn('credentials',{
+        
+        const result = await signIn('credentials', {
             email: values.email,
             password: values.password,
         });
-        console.log(signInData)
-        // if (signInData?.error) {
-        //     console.log(signInData.error)
-        // }else{
-        //     router.push('/user')
-        // }
+        if (result) {
+            router.push('/upload');
+        } else {
+            console.log("Authentication failed");
+        }
+        console.log(result)
+    };
 
-
-    }
     return (
         
         <Form {...form} >
